@@ -1,0 +1,34 @@
+version: '3'
+services:
+  gocd-server:
+    build:
+      context: .
+      dockerfile: Dockerfile.goserver
+    image: gocd-server-baseline
+    container_name: gocd_server
+    ports:
+      - "8153:8153"
+      - "8154:8154"
+    volumes:
+#      - /mnt/data/go/godata:/godata
+#      - /mnt/data/go/home-dir:/home/go
+      - /Users/ncheneweth/github/feedyard/tmp_baseline_pipeline/go/godata:/godata
+      - /Users/ncheneweth/github/feedyard/tmp_baseline_pipeline/go/home-dir:/home/go
+
+  gocd-agent:
+    build:
+      context: .
+      dockerfile: Dockerfile.goagent
+    image: gocd-agent-baseline
+    links:
+      - gocd-server
+    environment:
+      GO_SERVER: gocd-server
+    volumes:
+#      - /mnt/data/go/godata:/godata
+#      - /mnt/data/go/home-dir:/home/go
+      - /Users/ncheneweth/github/feedyard/tmp_baseline_pipeline/go/godata:/godata
+      - /Users/ncheneweth/github/feedyard/tmp_baseline_pipeline/go/home-dir:/home/go
+    depends_on:
+      - gocd-server
+
