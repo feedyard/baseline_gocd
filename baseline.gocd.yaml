@@ -1,6 +1,6 @@
 ---
 pipelines:
-  mypipe1: # definition of mypipe1 pipeline
+  Terraform: # definition of mypipe1 pipeline
     group: Baseline # note that the group name can contain only of alphanumeric & underscore characters
     locking: off
     materials:
@@ -16,6 +16,7 @@ pipelines:
               resources:
               artifacts:
               tabs:
+                -
               tasks: # ordered list of tasks to execute in job csharp
                - slack: # indicates type of task
                    WebhookUrl: https://hooks.slack.com/services/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
