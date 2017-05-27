@@ -9,11 +9,6 @@ pipelines:
         # keyword git says about type of material and url at once
         git: http://my.example.org/mygit.git
         branch: ci
-      myupstream:
-        # type is optional here, material type is implied based on presence of pipeline and stage fields
-        # type: dependency
-        pipeline: pipe2
-        stage: test
     stages: # list of stages in order
       - build: # name of stage
           clean_workspace: true
