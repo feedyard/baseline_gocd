@@ -12,25 +12,20 @@ pipelines:
       - build: # name of stage
           clean_workspace: true
           jobs:
-            csharp: # name of the job
+            slackTriggerBuild:
               resources:
-               - net45
               artifacts:
-               - build:
-                   source: bin/
-                   destination: build
-               - test:
-                   source: tests/
-                   destination: test-reports/
               tabs:
-                report: test-reports/index.html
               tasks: # ordered list of tasks to execute in job csharp
-               - exec: # indicates type of task
-                   command: make
-                   arguments:
-                    - "VERBOSE=true"
-               # shorthand for script-executor plugin
-               - script: ./build.sh ci
+               - slack: # indicates type of task
+                   WebhookUrl: https://hooks.slack.com/services/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
+                   ChannelType: Channel
+                   Channel: deploy
+                   DisplayName: Terraform Build Trigger
+                   Title: Build Trigger
+                   Message: The baseline terraform pipeline has detected a merge with the baeline repo and a build has been triggered
+                   ColorType: none
+                   IconOrEMoji:
 
 
 #pipelines:
