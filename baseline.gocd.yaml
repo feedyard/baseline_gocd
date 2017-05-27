@@ -3,6 +3,8 @@ pipelines:
     group: baseline # note that the group name can contain only of alphanumeric & underscore characters
     locking: off
     materials:
+      github:
+        git: https://github.com/feedyard/baseline_tf.git
     stages: # list of stages in order
       - build: # name of stage
           clean_workspace: true
