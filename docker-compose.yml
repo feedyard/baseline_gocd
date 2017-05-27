@@ -12,8 +12,8 @@ services:
     volumes:
 #      - /mnt/data/go/godata:/godata
 #      - /mnt/data/go/home-dir:/home/go
-      - /Users/ncheneweth/github/feedyard/tmp_baseline_pipeline/go/godata:/godata
-      - /Users/ncheneweth/github/feedyard/tmp_baseline_pipeline/go/home-dir:/home/go
+      - /Users/ncheneweth/github/feedyard/baseline_gocd/go/godata:/godata
+      - /Users/ncheneweth/github/feedyard/baseline_gocd/go/home-dir:/home/go
 
   gocd-agent:
     build:
@@ -27,8 +27,7 @@ services:
     volumes:
 #      - /mnt/data/go/godata:/godata
 #      - /mnt/data/go/home-dir:/home/go
-      - /Users/ncheneweth/github/feedyard/tmp_baseline_pipeline/go/godata:/godata
-      - /Users/ncheneweth/github/feedyard/tmp_baseline_pipeline/go/home-dir:/home/go
+      - /Users/ncheneweth/github/feedyard/baseline_gocd/go/godata:/godata
+      - /Users/ncheneweth/github/feedyard/baseline_gocd/go/home-dir:/home/go
     depends_on:
       - gocd-server
-

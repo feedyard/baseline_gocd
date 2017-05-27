@@ -8,5 +8,7 @@ Includes plugins and pipeline configuration to manage the following baseline pip
 * lifecycle management-gocd cluster
 * lifecycle management-gocd service
 * Auth0 integration/rules
+* Smashing Dashboard
+* Nevergreen radiator
 
 

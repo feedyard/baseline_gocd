@@ -1,0 +1,33 @@
+pipelines:
+  baseline_terraform: # definition of mypipe1 pipeline
+    group: baseline # note that the group name can contain only of alphanumeric & underscore characters
+    locking: off
+    materials:
+    stages: # list of stages in order
+      - build: # name of stage
+          clean_workspace: true
+          jobs:
+            slackTriggerBuild: # name of the job
+              tasks: # ordered list of tasks to execute in job csharp
+               - slack:
+                   WebhookUrl: https://hooks.slack.com/services/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
+                   ChannelType: Channel
+                   Channel: deploy
+                   DisplayName: Terraform Build Trigger
+                   Title: Build Trigger
+                   Message: The baseline terraform pipeline has detected a merge with the baeline repo and a build has been triggered
+                   ColorType: none
+                   IconOrEMoji:
+            init:
+              tasks:
+                - exec:
+                  command: terraform
+                  arguments:
+                    - "init"
+                    - "-var-file=${environment}.tfvars"
+                    - "-var access_key=${access_key}"
+                    - "-v secret_key=${secret_key}"
+                - exec:
+                  command: terraform
+                  arguments:
+                    - "get"

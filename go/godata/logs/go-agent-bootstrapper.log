@@ -1,0 +1,6 @@
+2017-05-27 00:57:36,064 [main     ] INFO  agent.common.util.JarUtil:68 - Attempting to load Go-Agent-Launcher-Class from 8cccc3ec-7b59-4a50-9d93-a2d06e738fcaagent-launcher.jar File: 
+2017-05-27 00:57:36,069 [main     ] INFO  agent.common.util.JarUtil:77 - manifestLibDirKey: Go-Agent-Launcher-Lib-Dir: libs
+2017-05-27 00:57:36,095 [main     ] INFO  agent.common.util.JarUtil:83 - manifestClassKey: Go-Agent-Launcher-Class: com.thoughtworks.go.agent.launcher.AgentLauncherImpl
+2017-05-27 00:57:36,099 [main     ] INFO  agent.common.util.ParentClassAccessFilteringClassloader:43 - Loading com.thoughtworks.cruise.agent.common.launcher.AgentLauncher using com.simontuffs.onejar.JarClassLoader
+2017-05-27 00:57:36,126 [main     ] INFO  go.agent.bootstrapper.AgentBootstrapper:79 - Attempting create and start launcher...
+2017-05-27 00:57:36,168 [main     ] INFO  agent.common.util.ParentClassAccessFilteringClassloader:43 - Loading com.thoughtworks.cruise.agent.common.launcher.AgentLaunchDescriptor using com.simontuffs.onejar.JarClassLoader
