@@ -1,3 +1,0 @@
-[Sat May 27 00:57:35 UTC 2017] Starting Go Agent Bootstrapper with command: java -jar /go-agent/agent-bootstrapper.jar -serverUrl https://gocd-server:8154/go
-[Sat May 27 00:57:35 UTC 2017] Starting Go Agent Bootstrapper in directory: /go
-[Sat May 27 00:57:35 UTC 2017] AGENT_STARTUP_ARGS=-Dcruise.console.publish.interval=10 -Xms128m -Xmx256m    -Djava.security.egd=file:/dev/./urandom

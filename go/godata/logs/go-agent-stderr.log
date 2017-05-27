@@ -1,2 +1,0 @@
-Could not find file `config/agent-log4j.properties'. Attempting to load from classpath.
-Using classpath resource `config/agent-log4j.properties'.
