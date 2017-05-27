@@ -1,35 +1,82 @@
+---
 pipelines:
-  baseline_terraform: # definition of mypipe1 pipeline
-    group: baseline # note that the group name can contain only of alphanumeric & underscore characters
+  mypipe1: # definition of mypipe1 pipeline
+    group: mygroup # note that the group name can contain only of alphanumeric & underscore characters
+    label_template: "${mygit[:8]}"
     locking: off
     materials:
-      github:
-        git: https://github.com/feedyard/baseline_tf.git
+      mygit: # this is the name of material, the name can contain only of alphanumeric & underscore characters
+        # keyword git says about type of material and url at once
+        git: http://my.example.org/mygit.git
+        branch: ci
+      myupstream:
+        # type is optional here, material type is implied based on presence of pipeline and stage fields
+        # type: dependency
+        pipeline: pipe2
+        stage: test
     stages: # list of stages in order
       - build: # name of stage
           clean_workspace: true
           jobs:
-            slackTriggerBuild: # name of the job
+            csharp: # name of the job
+              resources:
+               - net45
+              artifacts:
+               - build:
+                   source: bin/
+                   destination: build
+               - test:
+                   source: tests/
+                   destination: test-reports/
+              tabs:
+                report: test-reports/index.html
               tasks: # ordered list of tasks to execute in job csharp
-               - slack:
-                   WebhookUrl: https://hooks.slack.com/services/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
-                   ChannelType: Channel
-                   Channel: deploy
-                   DisplayName: Terraform Build Trigger
-                   Title: Build Trigger
-                   Message: The baseline terraform pipeline has detected a merge with the baeline repo and a build has been triggered
-                   ColorType: none
-                   IconOrEMoji:
-            init:
-              tasks:
-                - exec:
-                  command: terraform
-                  arguments:
-                    - "init"
-                    - "-var-file=${environment}.tfvars"
-                    - "-var access_key=${access_key}"
-                    - "-v secret_key=${secret_key}"
-                - exec:
-                  command: terraform
-                  arguments:
-                    - "get"
+               - fetch:
+                   pipeline: pipe2
+                   stage: build
+                   job: test
+                   source: test-bin/
+                   destination: bin/
+               - exec: # indicates type of task
+                   command: make
+                   arguments:
+                    - "VERBOSE=true"
+               # shorthand for script-executor plugin
+               - script: ./build.sh ci
+
+
+#pipelines:
+#  baseline_terraform: # definition of mypipe1 pipeline
+#    group: baseline # note that the group name can contain only of alphanumeric & underscore characters
+#    locking: off
+#    materials:
+#      github:
+#        git: https://github.com/feedyard/baseline_tf.git
+#    stages: # list of stages in order
+#      - build: # name of stage
+#          clean_workspace: true
+#          jobs:
+#            slackTriggerBuild: # name of the job
+#              tasks: # ordered list of tasks to execute in job csharp
+#               - slack:
+#                   WebhookUrl: https://hooks.slack.com/services/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
+#                   ChannelType: Channel
+#                   Channel: deploy
+#                   DisplayName: Terraform Build Trigger
+#                   Title: Build Trigger
+#                   Message: The baseline terraform pipeline has detected a merge with the baeline repo and a build has been triggered
+#                   ColorType: none
+#                   IconOrEMoji:
+#            init:
+#              tasks:
+#                - exec:
+#                  command: terraform
+#                  arguments:
+#                    - "init"
+#                    - "-var-file=${environment}.tfvars"
+#                    - "-var access_key=${access_key}"
+#                    - "-v secret_key=${secret_key}"
+#                - exec:
+#                  command: terraform
+#                  arguments:
+#                    - "get"
