@@ -15,10 +15,10 @@ pipelines:
             slackTriggerBuild:
               tasks: # ordered list of tasks to execute in job csharp
                 - plugin:
-                    plugin_configuration:
+                    options:
+                    configuration:
                       id: slack.task
                       version: 1
-                    configuration:
                       WebhookUrl: https://hooks.slack.com/services/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
                       ChannelType: Channel
                       Channel: deploy
