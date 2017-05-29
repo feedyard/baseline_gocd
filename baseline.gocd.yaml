@@ -16,8 +16,7 @@ pipelines:
               tasks: # ordered list of tasks to execute in job csharp
                 - plugin:
                     options:
-                      script:
-                        -
+                      script: ./build sh
                     configuration:
                       id: slack.task
                       version: 1
