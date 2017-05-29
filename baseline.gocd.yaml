@@ -14,7 +14,7 @@ pipelines:
           jobs:
             slackTriggerBuild:
               tasks: # ordered list of tasks to execute in job csharp
-               - slack: # indicates type of task
+               - slack.task: # indicates type of task
                    WebhookUrl: https://hooks.slack.com/services/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
                    ChannelType: Channel
                    Channel: deploy
