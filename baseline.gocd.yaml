@@ -16,10 +16,6 @@ pipelines:
               tasks: # ordered list of tasks to execute in job csharp
                 - plugin:
                     options:
-                      script: ./build sh
-                    configuration:
-                      id: slack.task
-                      version: 1
                       WebhookUrl: https://hooks.slack.com/services/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
                       ChannelType: Channel
                       Channel: deploy
@@ -28,6 +24,10 @@ pipelines:
                       Message: The baseline terraform pipeline has detected a merge with the baeline repo and a build has been triggered
                       ColorType: none
                       IconOrEMoji:
+                    configuration:
+                      id: slack.task
+                      version: 1
+
 
 
 #pipelines:
