@@ -1,12 +1,13 @@
 version: 2
 jobs:
   build:
-    working_directory: ./
     docker:
       - image: circleci/python:3.6
     steps:
           - checkout
-          - setup_remote_docker
-          - run: |
-            docker info
-            docker-compose build baseline-gocd-server
+          - run:
+              name: confirm Docker
+              command: 'docker info'
+          - run:
+              name: build-gocd-server
+              command: 'docker-compose build baseline-gocd-server'
