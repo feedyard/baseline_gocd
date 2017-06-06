@@ -1,13 +1,11 @@
-FROM gocd/gocd-server:v17.4.0
+FROM gocd/gocd-server:v17.5.0
 
-ENV GITHUB_OATH_LOGIN_VERSION="2.3"
 ENV YAML_CONFIG_PLUGIN="0.4.0"
 ENV GOCD_SLACK_TASK="1.3.1"
 
 WORKDIR /go-plugins/external
 
 RUN apk add --update git curl openssh && \
-    curl -L -O https://github.com/gocd-contrib/gocd-oauth-login/releases/download/v${GITHUB_OATH_LOGIN_VERSION}/github-oauth-login-${GITHUB_OATH_LOGIN_VERSION}.jar && \
     curl -L -O https://github.com/tomzo/gocd-yaml-config-plugin/releases/download/${YAML_CONFIG_PLUGIN}/yaml-config-plugin-${YAML_CONFIG_PLUGIN}.jar && \
     curl -L -O https://github.com/Vincit/gocd-slack-task/releases/download/v${GOCD_SLACK_TASK}/gocd-slack-task-${GOCD_SLACK_TASK}.jar
 

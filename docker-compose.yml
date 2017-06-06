@@ -1,33 +1,35 @@
 version: '3'
 services:
-  gocd-server:
+  baseline-gocd-server:
     build:
       context: .
       dockerfile: Dockerfile.goserver
-    image: gocd-server-baseline
-    container_name: gocd_server
+    image: gocd-server-baseline:latest
+    container_name: baseline-gocd-server
     ports:
       - "8153:8153"
       - "8154:8154"
     volumes:
-#      - /mnt/data/go/godata:/godata
-#      - /mnt/data/go/home-dir:/home/go
-      - /Users/ncheneweth/github/feedyard/baseline_gocd/go/godata:/godata
-      - /Users/ncheneweth/github/feedyard/baseline_gocd/go/home-dir:/home/go
+      - /mnt/data/go/godata:/godata
+      - /mnt/data/go/home-dir:/home/go
+#      - /Users/ncheneweth/github/feedyard/baseline_gocd/go/godata:/godata
+#      - /Users/ncheneweth/github/feedyard/baseline_gocd/go/home-dir:/home/go
 
-  gocd-agent:
+  baseline-agent-1:
     build:
       context: .
       dockerfile: Dockerfile.goagent
-    image: gocd-agent-baseline
+    image: baseline-agent-1
     links:
-      - gocd-server
+      - baseline-gocd-server
     environment:
-      GO_SERVER: gocd-server
+      GO_SERVER: baseline-gocd-server
+      AGENT_AUTO_REGISTER_KEY: 44131dc8de46
+      AGENT_AUTO_HOSTNAME: baseline-agent-1
     volumes:
 #      - /mnt/data/go/godata:/godata
 #      - /mnt/data/go/home-dir:/home/go
       - /Users/ncheneweth/github/feedyard/baseline_gocd/go/godata:/godata
       - /Users/ncheneweth/github/feedyard/baseline_gocd/go/home-dir:/home/go
     depends_on:
-      - gocd-server
+      - baseline-gocd-server
