@@ -1,2 +1,3 @@
 go/
-bootstrap.pem
+*.pem
+*.env

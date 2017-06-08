@@ -11,5 +11,12 @@ jobs:
           name: confirm Docker
           command: 'docker info'
       - run:
+          name: pre
+          command: |
+          openssl aes-256-cbc -d -in ca.ci -k $KEY >> ~/ca.pem
+          openssl aes-256-cbc -d -in cert.ci -k $KEY >> ~/cert.pem
+          openssl aes-256-cbc -d -in key.ci -k $KEY >> ~/key.pem
+          openssl aes-256-cbc -d -in secrets.ci -k $KEY >> ~/.circlerc
+      - run:
           name: build-gocd-server
           command: 'docker-compose build baseline-gocd-server'
