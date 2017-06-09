@@ -1,14 +1,16 @@
 version: '3'
+
 services:
-  baseline-gocd-server:
+
+  gocd-server:
     build:
       context: .
       dockerfile: Dockerfile.goserver
     image: gocd-server-baseline:latest
     container_name: baseline-gocd-server
     ports:
-      - "8153:8153"
-      - "8154:8154"
+      - 8153:8153
+      - 8154:8154
     volumes:
       - /mnt/data/go/godata:/godata
       - /mnt/data/go/home-dir:/home/go
@@ -28,7 +30,7 @@ services:
 #      - cert.pem
 #      - key.pem
 
-#  baseline-agent-1:
+#  gocd-agent:
 #    build:
 #      context: .
 #      dockerfile: Dockerfile.goagent

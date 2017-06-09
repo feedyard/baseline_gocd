@@ -3,7 +3,7 @@ jobs:
   build:
     working_directory: ~/baseline_gocd
     docker:
-      - image: circleci/python:3.6
+      - image: circleci/python:3.6.1
     steps:
       - checkout
       - setup_remote_docker
@@ -24,7 +24,6 @@ jobs:
           command: 'openssl aes-256-cbc -d -in secrets.ci -k $KEY >> ~/.circlerc'
       - run:
           name: build-gocd-server
-          command: 'docker-compose build baseline-gocd-server'
+          command: 'docker-compose build gocd-server'
       - deploy:
-          command: 'docker --tlsverify --tlscacert=ca.pem --tlscert=cert.pem --tlskey=key.pem -H=$SWARM_HOST:2376 stack deploy --compose-file docker-compose.yml gocd-server'
-
+          command: 'docker --tlsverify --tlscacert=ca.pem --tlscert=cert.pem --tlskey=key.pem -H=$SWARM_HOST:2376 stack deploy --compose-file docker-compose.yml baseline'
