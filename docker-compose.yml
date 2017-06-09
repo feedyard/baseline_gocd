@@ -23,10 +23,10 @@ services:
         condition: on-failure
         delay: 30s
         max_attempts: 3
-    secrets:
-      - ca.pem
-      - cert.pem
-      - key.pem
+#    secrets:
+#      - ca.pem
+#      - cert.pem
+#      - key.pem
 
 #  baseline-agent-1:
 #    build:
