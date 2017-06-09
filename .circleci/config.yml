@@ -13,9 +13,18 @@ jobs:
       - run:
           name: decrypt ca.pem
           command: 'openssl aes-256-cbc -d -in ca.ci -k $KEY >> ~/ca.pem'
-#          openssl aes-256-cbc -d -in cert.ci -k $KEY >> ~/cert.pem
-#          openssl aes-256-cbc -d -in key.ci -k $KEY >> ~/key.pem
-#          openssl aes-256-cbc -d -in secrets.ci -k $KEY >> ~/.circlerc
+      - run:
+          name: decrypt cert.pem
+          command: 'openssl aes-256-cbc -d -in cert.ci -k $KEY >> ~/cert.pem'
+      - run:
+          name: decrypt key.pem
+          command: 'openssl aes-256-cbc -d -in key.ci -k $KEY >> ~/key.pem'
+      - run:
+          name: decrypt secrets
+          command: 'openssl aes-256-cbc -d -in secrets.ci -k $KEY >> ~/.circlerc'
       - run:
           name: build-gocd-server
           command: 'docker-compose build baseline-gocd-server'
+      - deploy:
+          command: 'docker --tlsverify --tlscacert=ca.pem --tlscert=cert.pem --tlskey=key.pem -H=$SWARM_HOST:2376 stack deploy --compose-file docker-compose.yml gocd-server'
+

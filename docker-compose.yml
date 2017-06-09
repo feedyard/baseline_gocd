@@ -14,22 +14,35 @@ services:
       - /mnt/data/go/home-dir:/home/go
 #      - /Users/ncheneweth/github/feedyard/baseline_gocd/go/godata:/godata
 #      - /Users/ncheneweth/github/feedyard/baseline_gocd/go/home-dir:/home/go
+    deploy:
+      replicas: 1
+      update_config:
+        parallelism: 1
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+        delay: 30s
+        max_attempts: 3
+    secrets:
+      - ca.pem
+      - cert.pem
+      - key.pem
 
-  baseline-agent-1:
-    build:
-      context: .
-      dockerfile: Dockerfile.goagent
-    image: baseline-agent-1
-    links:
-      - baseline-gocd-server
-    environment:
-      GO_SERVER: baseline-gocd-server
-      AGENT_AUTO_REGISTER_KEY: 44131dc8de46
-      AGENT_AUTO_HOSTNAME: baseline-agent-1
-    volumes:
-#      - /mnt/data/go/godata:/godata
-#      - /mnt/data/go/home-dir:/home/go
-      - /Users/ncheneweth/github/feedyard/baseline_gocd/go/godata:/godata
-      - /Users/ncheneweth/github/feedyard/baseline_gocd/go/home-dir:/home/go
-    depends_on:
-      - baseline-gocd-server
+#  baseline-agent-1:
+#    build:
+#      context: .
+#      dockerfile: Dockerfile.goagent
+#    image: baseline-agent-1
+#    links:
+#      - baseline-gocd-server
+#    environment:
+#      GO_SERVER: baseline-gocd-server
+#      AGENT_AUTO_REGISTER_KEY: 44131dc8de46
+#      AGENT_AUTO_HOSTNAME: baseline-agent-1
+#    volumes:
+##      - /mnt/data/go/godata:/godata
+##      - /mnt/data/go/home-dir:/home/go
+#      - /Users/ncheneweth/github/feedyard/baseline_gocd/go/godata:/godata
+#      - /Users/ncheneweth/github/feedyard/baseline_gocd/go/home-dir:/home/go
+#    depends_on:
+#      - baseline-gocd-server
