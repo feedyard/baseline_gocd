@@ -1,23 +1,31 @@
 from invoke import task
-import json
-import boto3
-from os.path import expanduser
+from paramiko import SSHClient, AutoAddPolicy
+import os
 
 
-# assumes ENV var $KEY
 @task
-def enckeys(ctx):
-    ctx.run("openssl aes-256-cbc -e -in ca.pem -out ca.ci -k $KEY", pty=True)
-    ctx.run("openssl aes-256-cbc -e -in cert.pem -out cert.ci -k $KEY", pty=True)
-    ctx.run("openssl aes-256-cbc -e -in key.pem -out key.ci -k $KEY", pty=True)
-    ctx.run("openssl aes-256-cbc -e -in secrets.env -out secrets.ci -k $KEY", pty=True)
+def getkeys(ctx):
+    ctx.run("cp ~/.docker/machine/machines/bootstrap01/ca.pem ca.pem", pty=True)
+    ctx.run("cp ~/.docker/machine/machines/bootstrap01/cert.pem cert.pem", pty=True)
+    ctx.run("cp ~/.docker/machine/machines/bootstrap01/key.pem key.pem", pty=True)
 
+@task
+def stack_deploy(ctx):
 
+    # if directory structure for gocd is not already in place, create
+    ssh = SSHClient()
+    ssh.set_missing_host_key_policy(AutoAddPolicy())
+    ssh.connect(os.environ['SWARM_HOST'], username='ubuntu', key_filename='./bootstrap.pem')
+    ssh.exec_command("mkdir -p /mnt/data/go/godata")
+    ssh.exec_command("mkdir -p /mnt/data/go/home-dir")
 
+    cmd = docker_remote() + "stack deploy --compose-file docker-compose.yml baseline"
+    ctx.run(cmd, pty=True)
 
-def docker_remote(tfvars, host_name):
-    key_path = expanduser("~") + '/.docker/machine/machines/{}/'.format(tfvars['bootstrap-instance-name'])
-return "docker --tlsverify --tlscacert={} --tlscert={} --tlskey={} -H={} ".format(key_path + 'ca.pem',
-                                                                                  key_path + 'cert.pem',
-                                                                                  key_path + 'key.pem',
-                                                                                  host_name + ':2376')
+@task
+def stack_rm(ctx):
+    cmd = docker_remote() + "stack rm baseline"
+    ctx.run(cmd, pty=True)
+
+def docker_remote():
+    return "docker --tlsverify --tlscacert=ca.pem --tlscert=cert.pem --tlskey=key.pem -H=$SWARM_HOST:2376 "

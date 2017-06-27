@@ -1,21 +1,17 @@
-version: '3'
+version: '3.1'
 
 services:
 
   gocd-server:
-    build:
-      context: .
-      dockerfile: Dockerfile.goserver
-    image: gocd-server-baseline:latest
-    container_name: baseline-gocd-server
+    image: gocd/gocd-server:v17.5.0
     ports:
       - 8153:8153
       - 8154:8154
     volumes:
       - /mnt/data/go/godata:/godata
       - /mnt/data/go/home-dir:/home/go
-#      - /Users/ncheneweth/github/feedyard/baseline_gocd/go/godata:/godata
-#      - /Users/ncheneweth/github/feedyard/baseline_gocd/go/home-dir:/home/go
+    networks:
+      default:
     deploy:
       replicas: 1
       update_config:
@@ -25,26 +21,36 @@ services:
         condition: on-failure
         delay: 30s
         max_attempts: 3
-#    secrets:
-#      - ca.pem
-#      - cert.pem
-#      - key.pem
+    secrets:
+      - source: ca.pem
+        target: ca.pem
+      - source: cert.pem
+        target: cert.pem
+      - source: key.pem
+        target: key.pem
 
-#  gocd-agent:
-#    build:
-#      context: .
-#      dockerfile: Dockerfile.goagent
-#    image: baseline-agent-1
-#    links:
-#      - baseline-gocd-server
-#    environment:
-#      GO_SERVER: baseline-gocd-server
-#      AGENT_AUTO_REGISTER_KEY: 44131dc8de46
-#      AGENT_AUTO_HOSTNAME: baseline-agent-1
-#    volumes:
-##      - /mnt/data/go/godata:/godata
-##      - /mnt/data/go/home-dir:/home/go
-#      - /Users/ncheneweth/github/feedyard/baseline_gocd/go/godata:/godata
-#      - /Users/ncheneweth/github/feedyard/baseline_gocd/go/home-dir:/home/go
-#    depends_on:
-#      - baseline-gocd-server
+  gocd-agent01:
+    image: quay.io/feedyard/baseline-gocd-agent:3.5.25
+    environment:
+      GO_SERVER: gocd-server
+      AGENT_AUTO_REGISTER_KEY: e5c56276-be00-47f2-8bfc-92bef98e9f60
+      AGENT_AUTO_REGISTER_HOSTNAME: baseline-gocd-agent01
+    volumes:
+      - /mnt/data/go/godata:/godata
+      - /mnt/data/go/home-dir:/home/go
+    networks:
+      default:
+    depends_on:
+      - gocd-server
+    deploy:
+      replicas: 1
+      update_config:
+        parallelism: 1
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+        delay: 30s
+        max_attempts: 3
+
+networks:
+  default:

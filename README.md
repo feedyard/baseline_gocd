@@ -4,51 +4,31 @@ Bootstrap GoCD orchestration for baseline management
 Deploys GoCD-server and a single agent to the bootstrap dockerhost.
 
 Includes plugins and pipeline configuration to manage the following baseline pipelines:
-* baseline terraform
-* lifecycle management-gocd cluster
-* lifecycle management-gocd service
-* Auth0 integration/rules
-* Smashing Dashboard
-* Nevergreen radiator
+* Baseline Terraform pipeline
+* Auth0 integration/rules deploy
+* Baseline Dashboard deploy
+* Nevergreen radiator deploy
+* Management-GO-Swarm (pipeline to manage the Test and Prod, 3-node swarm upon which will run the go-instance that is used to deploy the various ‘management’ components of the ref arch.)
+* Management-GO server/agents (there is a Test and Prod ‘environment’ of the gocd service used to deploy/manage the various ‘management’ components, e.g., the mgmt-k8 cluster.)
+
 
 
 ### implementation
 
-Two methods of deploying the baseline gocd server are demonstrated below.
-
-#### 1. Deploy via circleci
-
-One approach to bootstrap the infrastructure is by managing the initial orchestration service via a SaaS provided orchestration tool. Circle-ci is used to demonstrate.
-
-#### 2. deploy from workstation
-
-Alternatively, you can choose to manage the baseline gocd deployment from the command line. An Invoke tasks file is provided to demonstrate. 
+Note: currently in development. Deploy directly to bootstrap node via command line and then update gocd configuration to let instances manage themselves.
+For testing purposes this repo just manages the server/agent image stack updates and another repo is used to manage gocd-server configuration.
 
 
 #### Requirements
 
-Assumes the bootstrap_tf configurations are in place, including the EFS share used by the bootstrap docker host. Reference assumes use of quay.io registry.
+Assumes the bootstrap_tf configurations are in place, including the EFS share used by the bootstrap docker host.<br/>
 
 Within the local directory the required *.pem keys are available, and ENV variables are defined: listed below
 
-For circleci, the secrets are encrypted via openssl aes-256-cbc and the decryption key has been added to the circleci project.
+For ssh access to bootstrap01 node
+bootstrap.pem (or whatever name is used for this key-pair)
 
-For access secure docker daemon:
+For accessing secure docker daemon:
 ca.pem
 cert.pem
 key.pem
-
-quay.io docker registry:
-QUAY_USER
-QUAY_TOKEN
-
-#### pipelines included while implementating baseline orchestration
-```xml
-<config-repos>
-  <config-repo plugin=“yaml.config.plugin”>
-    <git url=“https://github.com/tomzo/gocd-yaml-config-example.git” />
-  </config-repo>
-</config-repos>
-```
-
-sudo docker push quay.io/feedyard/repository:tag
